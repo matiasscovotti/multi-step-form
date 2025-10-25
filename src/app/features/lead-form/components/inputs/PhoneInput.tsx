@@ -2,6 +2,7 @@
 
 import { forwardRef, useState, useRef, useEffect } from 'react';
 import PhoneInputWithCountry, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
+import type { E164Number } from 'libphonenumber-js/core';
 import { CaretDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import en from 'react-phone-number-input/locale/en';
 
@@ -74,6 +75,10 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
     }
   }, [isOpen]);
 
+  const handleValueChange = (newValue?: E164Number) => {
+    onChange?.(newValue ?? undefined);
+  };
+
   return (
     <div className="relative">
       <PhoneInputWithCountry
@@ -84,7 +89,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
         id={id}
         name={name}
         value={value}
-        onChange={onChange}
+        onChange={handleValueChange}
         onBlur={onBlur}
         placeholder={placeholder}
         className={`w-full px-4 py-2.5 rounded-lg border text-sm sm:text-base text-denim placeholder:text-grey focus:outline-none focus:ring-2 focus:ring-secondary ${
