@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { forwardRef, useState, useRef, useEffect, useCallback, type FocusEvent } from 'react';
+import { forwardRef, useState, useRef, useEffect, useCallback, type FocusEvent, type ChangeEvent } from 'react';
 import PhoneInputWithCountry, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
 import type { E164Number } from 'libphonenumber-js/core';
 import { CaretDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
@@ -108,6 +108,23 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
     return nextValue.startsWith('+') ? nextValue : `+${nextValue}`;
   }, []);
 
+  const handleSearchChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const caret = e.currentTarget.selectionStart ?? e.currentTarget.value.length;
+      setSearchTerm(e.target.value);
+      // After re-render, restore focus and caret to avoid losing input focus
+      setTimeout(() => {
+        if (isOpen && searchInputRef.current) {
+          searchInputRef.current.focus();
+          try {
+            searchInputRef.current.setSelectionRange(caret, caret);
+          } catch {}
+        }
+      }, 0);
+    },
+    [isOpen]
+  );
+
   const handleCountryChange = useCallback(
     (country?: string) => {
       const next = country && country.length ? country : 'AR';
@@ -193,7 +210,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
                       ref={searchInputRef}
                       type="text"
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={handleSearchChange}
                       placeholder="Search country..."
                       onKeyDown={(event) => event.stopPropagation()}
                       className="w-full pl-9 pr-3 py-2 text-sm border border-border-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
@@ -211,6 +228,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
                     return (
                       <li key={country}>
                         <button
+                          data-country-option
                           type="button"
                           onClick={() => {
                             setSelectedCountry(country);
