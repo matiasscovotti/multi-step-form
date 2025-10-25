@@ -1,6 +1,7 @@
 'use client';
 
 import { Controller, useFormContext } from 'react-hook-form';
+import { getCountryCallingCode } from 'react-phone-number-input';
 import { useTranslation } from 'react-i18next';
 
 import { FormField } from '../FormField';
@@ -12,12 +13,16 @@ export function ContactStep() {
   const {
     register,
     control,
+    setValue,
+    watch,
     formState: { errors }
   } = useFormContext<FormValues>();
 
   const { t } = useTranslation();
 
   const contactErrors = errors.contact ?? {};
+
+  const selectedCountry = watch('contact.country') || 'AR';
 
   return (
     <div className="grid grid-cols-1 gap-5">
@@ -34,6 +39,25 @@ export function ContactStep() {
               id="phone"
               placeholder={t('fields.phone.placeholder')}
               hasError={!!contactErrors.phone}
+              countryValue={selectedCountry}
+              onCountryChange={(cc) => {
+                const next = (cc || 'AR') as FormValues['contact']['country'];
+                setValue('contact.country', next, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                  shouldValidate: false
+                });
+
+                // Always overwrite phone with the selected country's calling code
+                try {
+                  const code = getCountryCallingCode(next as any);
+                  setValue('contact.phone', `+${code}`, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                    shouldValidate: false
+                  });
+                } catch {}
+              }}
               {...field}
             />
           </FormField>
