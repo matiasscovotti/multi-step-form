@@ -179,7 +179,7 @@ export function LeadFormLayout() {
   return (
     <main
       className={`
-          page-fade-in flex flex-col min-h-screen
+          page-fade-in flex flex-col h-screen overflow-hidden
           sm:flex-row sm:h-screen sm:overflow-hidden sm:px-3 sm:py-2 sm:pr-0
         `}
     >
@@ -187,8 +187,8 @@ export function LeadFormLayout() {
         <LeadFormSidebar isReviewCompleted={isSuccess} />
       </aside>
       <div className="flex flex-1 sm:max-w-[760px] sm:flex-0 sm:mx-auto sm:h-full">
-        <div className="flex h-full w-full flex-col gap-4 pt-6 sm:pt-4">
-          <div className="scroll-area flex-1 min-h-0">
+        <div className="flex h-full w-full min-h-0 flex-col gap-4 pt-4 sm:gap-3 sm:pt-0">
+          <div className="flex-1 min-h-0 sm:scroll-area">
             <Form.Card>
               {isSuccess ? (
                 <div key="success" className="step-transition flex flex-col items-center gap-4 py-12 text-center">
@@ -236,6 +236,7 @@ export function LeadFormLayout() {
               onNext={handleNext}
               onPrevious={goToPreviousStep}
               isSubmitting={submissionStatus === 'submitting'}
+              className="mt-auto sm:mt-0"
             />
           )}
         </div>

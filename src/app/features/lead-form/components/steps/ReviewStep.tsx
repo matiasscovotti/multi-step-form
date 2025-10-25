@@ -117,9 +117,17 @@ export function ReviewStep() {
         </div>
       </section>
 
-      <footer className="text-sm">
-        {t('summary.language')}: <strong className="text-denim">{i18n.language.toUpperCase()}</strong>
-      </footer>
+      <section className="space-y-3">
+        <header className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-denim">{t('summary.language')}</h2>
+        </header>
+        <div className="text-sm sm:text-base text-grey">
+          <div className="flex justify-between">
+            <dt className="font-medium text-grey">{t('fields.language.label')}</dt>
+            <dd className="text-grey">{i18n.language.toUpperCase()}</dd>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
