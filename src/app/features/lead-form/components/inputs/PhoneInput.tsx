@@ -102,22 +102,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
     }
   }, [countryValue, selectedCountry]);
 
-  useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      const input = searchInputRef.current;
-      const length = input.value.length;
-      input.setSelectionRange(length, length);
-    }
-  }, [isOpen, searchTerm]);
-
-  const keepSearchFocused = useCallback(() => {
-    if (searchInputRef.current) {
-      const input = searchInputRef.current;
-      if (input !== document.activeElement) {
-        input.focus();
-      }
-    }
-  }, []);
 
   const ensureLeadingPlus = useCallback((nextValue: string) => {
     if (!nextValue) return '+';
@@ -211,16 +195,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Search country..."
-                      onKeyDown={(event) => {
-                        keepSearchFocused();
-                        event.stopPropagation();
-                      }}
-                      onBlur={() => {
-                        // Prevent focus loss while dropdown is open
-                        if (isOpen) {
-                          requestAnimationFrame(keepSearchFocused);
-                        }
-                      }}
+                      onKeyDown={(event) => event.stopPropagation()}
                       className="w-full pl-9 pr-3 py-2 text-sm border border-border-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                     />
                   </div>
