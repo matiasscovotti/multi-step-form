@@ -87,6 +87,7 @@ export function LeadFormLayout() {
       setValue('contact.phone', contact.phone ?? '');
       setValue('contact.role', contact.role ?? '');
       setValue('contact.organization', contact.organization ?? '');
+      setValue('contact.country', contact.country ?? 'AR');
     }
 
     if (interests) {
@@ -122,7 +123,11 @@ export function LeadFormLayout() {
     }
 
     const payload = getValues();
-    console.log('[LeadForm] Submitting payload', payload);
+    const submissionPayload = {
+      ...payload,
+      contact_country: payload.contact?.country
+    };
+    console.log('[LeadForm] Submitting payload', submissionPayload);
 
     try {
       setSubmissionStatus('submitting');
@@ -133,7 +138,7 @@ export function LeadFormLayout() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(submissionPayload)
       });
 
       let responseBody: any = null;
@@ -188,7 +193,7 @@ export function LeadFormLayout() {
       </aside>
       <div className="flex flex-1 sm:mx-auto sm:max-w-[760px]">
         <div className="flex h-full w-full min-h-0 flex-col gap-4 pt-4 sm:gap-3 sm:pt-0">
-          <div className="flex-1 min-h-0 overflow-y-auto sm:overflow-visible sm:scroll-area">
+          <div className="scroll-area flex-1 min-h-0 pb-28 sm:pb-0">
             <Form.Card>
               {isSuccess ? (
                 <div key="success" className="step-transition flex flex-col items-center gap-4 py-12 text-center">

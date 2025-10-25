@@ -60,7 +60,8 @@ export const formSchema = z
         .nonempty({ message: 'validation.required' }),
       organization: z
         .string()
-        .nonempty({ message: 'validation.required' })
+        .nonempty({ message: 'validation.required' }),
+      country: z.string().min(2).max(5)
     }),
     interests: z
       .object({
@@ -95,6 +96,7 @@ export type FormStepField =
   | 'contact.phone'
   | 'contact.role'
   | 'contact.organization'
+  | 'contact.country'
   | 'interests.areas'
   | 'interests.other'
   | 'interests.levels'
@@ -122,7 +124,8 @@ export const FORM_STEPS: FormStepConfig[] = [
     fields: [
       'contact.phone',
       'contact.role',
-      'contact.organization'
+      'contact.organization',
+      'contact.country'
     ]
   },
   {

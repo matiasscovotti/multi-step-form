@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { forwardRef, useState, useRef, useEffect } from 'react';
+import { forwardRef, useState, useRef, useEffect, useCallback, type FocusEvent } from 'react';
 import PhoneInputWithCountry, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
 import type { E164Number } from 'libphonenumber-js/core';
 import { CaretDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
@@ -9,9 +9,16 @@ import en from 'react-phone-number-input/locale/en';
 
 import 'react-phone-number-input/style.css';
 
+const FLAG_OVERRIDES: Record<string, string> = {
+  AC: 'sh',
+  TA: 'sh'
+};
+
 const getFlagSrc = (countryCode?: string) => {
   if (!countryCode) return null;
-  return `https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`;
+  const override = FLAG_OVERRIDES[countryCode.toUpperCase()];
+  const code = (override ?? countryCode).toLowerCase();
+  return `https://flagcdn.com/24x18/${code}.png`;
 };
 
 interface PhoneInputProps {
@@ -22,17 +29,20 @@ interface PhoneInputProps {
   hasError?: boolean;
   name?: string;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  countryValue?: string;
+  onCountryChange?: (countryCode: string) => void;
 }
 
 export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneInput(
-  { id, value, onChange, placeholder, hasError = false, name, onBlur },
+  { id, value, onChange, placeholder, hasError = false, name, onBlur, countryValue, onCountryChange },
   ref
 ) {
-  const [selectedCountry, setSelectedCountry] = useState<string>('AR');
+  const [selectedCountry, setSelectedCountry] = useState<string>(countryValue ?? 'AR');
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const numberInputRef = useRef<HTMLInputElement | null>(null);
 
   const countries = getCountries();
   
@@ -76,7 +86,59 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    const input = numberInputRef.current;
+    if (!input) return;
+
+    if (!input.value.startsWith('+')) {
+      input.value = `+${input.value}`;
+    }
+  }, [value]);
+
+  useEffect(() => {
+    const next = countryValue && countryValue.length ? countryValue : 'AR';
+    if (next !== selectedCountry) {
+      setSelectedCountry(next);
+    }
+  }, [countryValue, selectedCountry]);
+
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      const input = searchInputRef.current;
+      const length = input.value.length;
+      input.setSelectionRange(length, length);
+    }
+  }, [isOpen, searchTerm]);
+
+  const keepSearchFocused = useCallback(() => {
+    if (searchInputRef.current) {
+      const input = searchInputRef.current;
+      if (input !== document.activeElement) {
+        input.focus();
+      }
+    }
+  }, []);
+
+  const ensureLeadingPlus = useCallback((nextValue: string) => {
+    if (!nextValue) return '+';
+    return nextValue.startsWith('+') ? nextValue : `+${nextValue}`;
+  }, []);
+
+  const handleCountryChange = useCallback(
+    (country?: string) => {
+      const next = country && country.length ? country : 'AR';
+      setSelectedCountry(next);
+      onCountryChange?.(next);
+    },
+    [onCountryChange]
+  );
+
   const handleValueChange = (newValue?: E164Number) => {
+    if (typeof newValue === 'string') {
+      onChange?.(ensureLeadingPlus(newValue));
+      return;
+    }
+
     onChange?.(newValue ?? undefined);
   };
 
@@ -86,7 +148,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
         international
         countryCallingCodeEditable={false}
         country={selectedCountry as any}
-        onCountryChange={(country) => setSelectedCountry(country || 'AR')}
+        onCountryChange={handleCountryChange as any}
         id={id}
         name={name}
         value={value}
@@ -97,7 +159,23 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
           hasError ? 'border-red' : 'border-border-grey'
         }`}
         numberInputProps={{
-          className: 'flex-1 outline-none'
+          ref: (input: HTMLInputElement | null) => {
+            numberInputRef.current = input;
+            if (typeof ref === 'function') {
+              ref(input);
+            } else if (ref) {
+              (ref as React.MutableRefObject<HTMLInputElement | null>).current = input;
+            }
+          },
+          className: 'flex-1 outline-none',
+          inputMode: 'tel',
+          placeholder: '+',
+          onBlur: (event: FocusEvent<HTMLInputElement>) => {
+            const input = event.currentTarget;
+            if (!input.value.startsWith('+')) {
+              input.value = `+${input.value}`;
+            }
+          }
         }}
         countrySelectComponent={({ value, onChange: onCountryChange, options, ...rest }) => (
           <div ref={dropdownRef} className="relative inline-flex mr-2">
@@ -133,7 +211,16 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Search country..."
-                      onKeyDown={(event) => event.stopPropagation()}
+                      onKeyDown={(event) => {
+                        keepSearchFocused();
+                        event.stopPropagation();
+                      }}
+                      onBlur={() => {
+                        // Prevent focus loss while dropdown is open
+                        if (isOpen) {
+                          requestAnimationFrame(keepSearchFocused);
+                        }
+                      }}
                       className="w-full pl-9 pr-3 py-2 text-sm border border-border-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                     />
                   </div>

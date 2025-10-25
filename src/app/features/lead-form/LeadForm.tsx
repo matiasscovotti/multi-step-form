@@ -19,7 +19,8 @@ const defaultValues: FormValues = {
   contact: {
     phone: '',
     role: '',
-    organization: ''
+    organization: '',
+    country: 'AR'
   },
   interests: {
     areas: [],
