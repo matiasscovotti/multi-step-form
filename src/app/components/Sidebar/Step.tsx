@@ -20,7 +20,10 @@ export function Step({ step, isActive = false, isCompleted = false }: StepProps)
               : 'border-white'
         }`}
       >
-        <span className={`text-sm font-bold ${isActive ? 'text-white' : isCompleted ? 'text-primary' : 'text-white'}`}>
+        <span
+          className={`text-sm font-bold ${isActive ? 'text-white' : isCompleted ? 'text-primary' : 'text-white'}`}
+          suppressHydrationWarning
+        >
           {isCompleted ? '✓' : step.number}
         </span>
 

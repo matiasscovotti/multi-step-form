@@ -42,7 +42,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const numberInputRef = useRef<HTMLInputElement | null>(null);
 
   const countries = getCountries();
   
@@ -86,14 +85,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    const input = numberInputRef.current;
-    if (!input) return;
-
-    if (!input.value.startsWith('+')) {
-      input.value = `+${input.value}`;
-    }
-  }, [value]);
+  // Leading plus is enforced via change/blur handlers; no imperative ref needed
 
   useEffect(() => {
     const next = countryValue && countryValue.length ? countryValue : 'AR';
@@ -160,14 +152,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
           hasError ? 'border-red' : 'border-border-grey'
         }`}
         numberInputProps={{
-          ref: (input: HTMLInputElement | null) => {
-            numberInputRef.current = input;
-            if (typeof ref === 'function') {
-              ref(input);
-            } else if (ref) {
-              (ref as React.MutableRefObject<HTMLInputElement | null>).current = input;
-            }
-          },
           className: 'flex-1 outline-none',
           inputMode: 'tel',
           placeholder: '+',
@@ -233,8 +217,9 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
                           onClick={() => {
                             setSelectedCountry(country);
                             onCountryChange?.(country as any);
-                            setIsOpen(false);
                             setSearchTerm('');
+                            // Allow PhoneInputWithCountry to focus the number input before we close the menu
+                            setTimeout(() => setIsOpen(false), 0);
                           }}
                           className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors hover:bg-bg ${
                             isSelected ? 'bg-primary/10 text-primary font-semibold' : 'text-denim'
