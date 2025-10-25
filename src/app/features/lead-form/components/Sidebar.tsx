@@ -7,7 +7,11 @@ import { Step } from '@/app/components/Sidebar/Step';
 
 import { useLeadFormSteps, useStepNavigation } from '../hooks';
 
-export function LeadFormSidebar() {
+interface LeadFormSidebarProps {
+  isReviewCompleted?: boolean;
+}
+
+export function LeadFormSidebar({ isReviewCompleted = false }: LeadFormSidebarProps) {
   const steps = useLeadFormSteps();
   const { currentStepIndex } = useStepNavigation();
   const { t } = useTranslation();
@@ -37,7 +41,7 @@ export function LeadFormSidebar() {
               label: t('progress.stepLabel', { number: index + 1 })
             }}
             isActive={index === currentStepIndex}
-            isCompleted={index < currentStepIndex}
+            isCompleted={index < currentStepIndex || (isReviewCompleted && step.id === 'review')}
           />
         ))}
       </div>

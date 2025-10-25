@@ -102,20 +102,20 @@ export function LeadFormLayout() {
   return (
     <main
       className={`
-          flex flex-col min-h-screen m-0 overflow-hidden
+          page-fade-in flex flex-col min-h-screen m-0 overflow-hidden
           sm:flex-row sm:m-4 sm:mr-0 sm:min-h-[calc(100vh-32px)]
         `}
     >
       <aside className="sm:sticky sm:top-4 sm:h-[calc(100vh-32px)] sm:mr-4">
-        <LeadFormSidebar />
+        <LeadFormSidebar isReviewCompleted={isSuccess} />
       </aside>
       <div className="flex flex-1 sm:max-w-[760px] sm:flex-0 sm:mx-auto">
         <div className="flex flex-1 flex-col gap-8 overflow-y-auto pb-32 pt-6 sm:pb-28">
           <div className="flex-1">
             <Form.Card>
               {isSuccess ? (
-                <div className="flex flex-col items-center gap-4 py-12 text-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-3xl text-white">
+                <div key="success" className="step-transition flex flex-col items-center gap-4 py-12 text-center">
+                  <div className="success-check flex h-16 w-16 items-center justify-center rounded-full bg-primary text-3xl text-white">
                     ✓
                   </div>
                   <h2 className="text-xl font-semibold text-denim sm:text-2xl">
@@ -133,7 +133,7 @@ export function LeadFormLayout() {
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col gap-6 sm:gap-8">
+                <div key={currentStep.id} className="step-transition flex flex-col gap-6 sm:gap-8">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                     <Form.Header
                       title={t(`${currentStep.translationKey}.title`)}
