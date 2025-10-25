@@ -18,6 +18,8 @@ const config: Config = {
         red: '#EE374A',
         'border-grey': '#D6D9E6',
         purple: '#483EFF',
+        primary: '#2A205E',
+        secondary: '#42B3FF',
         'very-light-grey': '#F8F9FF'
       }
     }

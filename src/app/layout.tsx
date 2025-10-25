@@ -2,6 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Ubuntu } from 'next/font/google'
 
+import { I18nProvider } from '@/i18n/provider'
+
 const ubuntu = Ubuntu({
   weight: ["300", "400", "500", "700"],
   subsets: ['latin']
@@ -10,6 +12,12 @@ const ubuntu = Ubuntu({
 export const metadata: Metadata = {
   title: 'Multi Step Form',
   description: 'Multi Step Form',
+  icons: {
+    icon: {
+      url: '/images/favicon.jpg',
+      type: 'image/jpeg'
+    }
+  }
 }
 
 export default function RootLayout({
@@ -19,7 +27,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className='antialiased'>
-      <body className={ubuntu.className}>{children}</body>
+      <body className={ubuntu.className}>
+        <I18nProvider>
+          {children}
+        </I18nProvider>
+      </body>
     </html>
   )
 }

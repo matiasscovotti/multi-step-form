@@ -1,0 +1,124 @@
+{
+  "languageSelector": {
+    "label": "Sélectionnez la langue"
+  },
+  "progress": {
+    "label": "Étape {{current}} sur {{total}}",
+    "stepLabel": "Étape {{number}}"
+  },
+  "steps": {
+    "personal": {
+      "title": "Informations personnelles",
+      "description": "Présentez-vous pour que nous vous reliions rapidement à Educabot."
+    },
+    "contact": {
+      "title": "Contact et organisation",
+      "description": "Précisez comment vous joindre et résumez votre organisation."
+    },
+    "interests": {
+      "title": "Intérêts et niveau",
+      "description": "Choisissez vos thèmes et niveaux éducatifs."
+    },
+    "review": {
+      "title": "Vérifier et confirmer",
+      "description": "Contrôlez que tout est correct avant l'envoi."
+    }
+  },
+  "fields": {
+    "firstName": {
+      "label": "Prénom",
+      "placeholder": "ex. Ana"
+    },
+    "lastName": {
+      "label": "Nom de famille",
+      "placeholder": "ex. Pérez"
+    },
+    "country": {
+      "label": "Pays",
+      "placeholder": "Sélectionnez un pays"
+    },
+    "email": {
+      "label": "Courriel professionnel",
+      "placeholder": "nom@organisation.com"
+    },
+    "phone": {
+      "label": "Téléphone",
+      "placeholder": "+33 6 12 34 56 78"
+    },
+    "whatsapp": {
+      "label": "WhatsApp (optionnel)",
+      "placeholder": "+33 6 12 34 56 78"
+    },
+    "role": {
+      "label": "Rôle",
+      "placeholder": "ex. Directrice de l'innovation"
+    },
+    "organization": {
+      "label": "Organisation",
+      "placeholder": "ex. Collège Educabot"
+    },
+    "interests": {
+      "label": "Domaines d'intérêt",
+      "options": {
+        "ai": "🤖 IA",
+        "robotics": "⚙️ Robotique",
+        "programming": "💻 Programmation",
+        "teacherTraining": "👩‍🏫 Formation des enseignants",
+        "platformAnalytics": "📊 Plateforme & Analytique",
+        "makerLab": "🧪 Laboratoire Maker",
+        "other": "➕ Autre"
+      },
+      "otherPlaceholder": "Parlez-nous davantage de votre intérêt"
+    },
+    "level": {
+      "label": "Niveau éducatif",
+      "options": {
+        "kinder": "🧸 Maternelle",
+        "primary": "📚 Primaire",
+        "secondary": "🏫 Secondaire",
+        "university": "🎓 Université"
+      }
+    },
+    "language": {
+      "label": "Langue préférée"
+    }
+  },
+  "buttons": {
+    "back": "Précédent",
+    "next": "Suivant",
+    "submit": "Envoyer"
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "email": "Veuillez entrer un courriel valide",
+    "workEmail": "Veuillez entrer un courriel professionnel",
+    "phone": "Veuillez entrer un numéro de téléphone valide",
+    "country": "Veuillez sélectionner un pays",
+    "interests": "Sélectionnez au moins un intérêt",
+    "interestOther": "Veuillez décrire votre autre intérêt",
+    "level": "Veuillez sélectionner un niveau"
+  },
+  "summary": {
+    "title": "Vérifiez vos informations",
+    "description": "Assurez-vous que les données ci-dessous sont correctes.",
+    "language": "Langue",
+    "contact": "Coordonnées",
+    "organization": "Informations sur l'organisation",
+    "interests": "Intérêts",
+    "level": "Niveau éducatif",
+    "edit": "Modifier"
+  },
+  "confirmation": {
+    "title": "Merci pour votre inscription !",
+    "description": "Nous avons bien reçu vos informations et l'équipe Educabot vous contactera prochainement.",
+    "cta": "Retour au début"
+  },
+  "notifications": {
+    "saving": "Enregistrement de votre progression…",
+    "saved": "Progression enregistrée",
+    "error": "Nous n'avons pas pu enregistrer votre progression. Merci de réessayer."
+  },
+  "privacy": {
+    "disclaimer": "Educabot utilisera ces informations pour vous contacter au sujet de ses services. Consultez notre politique de confidentialité."
+  }
+}
