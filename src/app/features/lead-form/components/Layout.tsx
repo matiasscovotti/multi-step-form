@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Form from '@/app/components/Form';
@@ -30,10 +30,81 @@ export function LeadFormLayout() {
   const { t } = useTranslation();
   const { validateFields } = useStepCompletion();
   const { goToNextStep, goToPreviousStep } = useStepNavigation();
-  const { getValues, reset } = useFormContext<FormValues>();
+  const { getValues, reset, setValue, watch } = useFormContext<FormValues>();
 
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+
+  const COOKIE_KEYS = {
+    personal: 'lead-form-personal',
+    contact: 'lead-form-contact',
+    interests: 'lead-form-interests'
+  } as const;
+
+  const writeCookie = (key: string, value: unknown) => {
+    try {
+      const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toUTCString();
+      document.cookie = `${key}=${encodeURIComponent(JSON.stringify(value))}; path=/; expires=${expires}`;
+    } catch (error) {
+      console.warn('[LeadForm] Failed to write cookie', key, error);
+    }
+  };
+
+  const readCookie = (key: string) => {
+    if (typeof document === 'undefined') return null;
+    const match = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith(`${key}=`));
+
+    if (!match) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(decodeURIComponent(match.split('=')[1] ?? ''));
+    } catch (error) {
+      console.warn('[LeadForm] Failed to parse cookie', key, error);
+      return null;
+    }
+  };
+
+  const clearCookie = (key: string) => {
+    document.cookie = `${key}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  };
+
+  useEffect(() => {
+    const personal = readCookie(COOKIE_KEYS.personal);
+    const contact = readCookie(COOKIE_KEYS.contact);
+    const interests = readCookie(COOKIE_KEYS.interests);
+
+    if (personal) {
+      setValue('personal.firstName', personal.firstName ?? '');
+      setValue('personal.lastName', personal.lastName ?? '');
+      setValue('personal.email', personal.email ?? '');
+    }
+
+    if (contact) {
+      setValue('contact.phone', contact.phone ?? '');
+      setValue('contact.role', contact.role ?? '');
+      setValue('contact.organization', contact.organization ?? '');
+    }
+
+    if (interests) {
+      setValue('interests.areas', Array.isArray(interests.areas) ? interests.areas : []);
+      setValue('interests.other', interests.other ?? '');
+      setValue('interests.levels', Array.isArray(interests.levels) ? interests.levels : []);
+    }
+  }, []);
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      writeCookie(COOKIE_KEYS.personal, values.personal);
+      writeCookie(COOKIE_KEYS.contact, values.contact);
+      writeCookie(COOKIE_KEYS.interests, values.interests);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const isSuccess = submissionStatus === 'success';
 
@@ -82,6 +153,9 @@ export function LeadFormLayout() {
       // Generate a new submission identifier for potential future submissions
       setSubmissionId(crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
       reset();
+      clearCookie(COOKIE_KEYS.personal);
+      clearCookie(COOKIE_KEYS.contact);
+      clearCookie(COOKIE_KEYS.interests);
     } catch (error) {
       console.error('[LeadForm] Submission error', error);
       setSubmissionStatus('error');
@@ -95,6 +169,9 @@ export function LeadFormLayout() {
     setSubmissionStatus('idle');
     setSubmissionError(null);
     setSubmissionId(crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+    clearCookie(COOKIE_KEYS.personal);
+    clearCookie(COOKIE_KEYS.contact);
+    clearCookie(COOKIE_KEYS.interests);
   };
 
   const CurrentStepComponent = useMemo(() => stepComponents[currentStep.id], [currentStep.id]);
@@ -102,16 +179,16 @@ export function LeadFormLayout() {
   return (
     <main
       className={`
-          page-fade-in flex flex-col min-h-screen m-0 overflow-hidden
-          sm:flex-row sm:m-4 sm:mr-0 sm:min-h-[calc(100vh-32px)]
+          page-fade-in flex flex-col min-h-screen
+          sm:flex-row sm:h-screen sm:overflow-hidden sm:px-3 sm:py-2 sm:pr-0
         `}
     >
-      <aside className="sm:sticky sm:top-4 sm:h-[calc(100vh-32px)] sm:mr-4">
+      <aside className="sm:sticky sm:top-2 sm:h-[calc(100vh-1rem)] sm:mr-4">
         <LeadFormSidebar isReviewCompleted={isSuccess} />
       </aside>
-      <div className="flex flex-1 sm:max-w-[760px] sm:flex-0 sm:mx-auto">
-        <div className="flex flex-1 flex-col gap-8 overflow-y-auto pb-32 pt-6 sm:pb-28">
-          <div className="flex-1">
+      <div className="flex flex-1 sm:max-w-[760px] sm:flex-0 sm:mx-auto sm:h-full">
+        <div className="flex h-full w-full flex-col gap-4 pt-6 sm:pt-4">
+          <div className="scroll-area flex-1 min-h-0">
             <Form.Card>
               {isSuccess ? (
                 <div key="success" className="step-transition flex flex-col items-center gap-4 py-12 text-center">

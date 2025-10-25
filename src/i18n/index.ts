@@ -16,7 +16,12 @@ const resources = {
 
 export const supportedLanguages = Object.keys(resources) as Array<keyof typeof resources>;
 
-const fallbackLng = 'es';
+const fallbackLng = 'en';
+
+const detectionOptions = {
+  order: ['querystring', 'localStorage', 'sessionStorage', 'navigator'],
+  caches: ['localStorage']
+};
 
 if (!i18next.isInitialized) {
   i18next
@@ -31,10 +36,7 @@ if (!i18next.isInitialized) {
       interpolation: {
         escapeValue: false
       },
-      detection: {
-        order: ['querystring', 'localStorage', 'sessionStorage'],
-        caches: ['localStorage']
-      }
+      detection: detectionOptions
     })
     .catch((error) => {
       // eslint-disable-next-line no-console

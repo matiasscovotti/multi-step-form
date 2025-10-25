@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
 import { useStepNavigation } from '../hooks';
@@ -32,7 +33,7 @@ export function LeadFormFooter({ onNext, onPrevious, className = '', isSubmittin
       <button
         onClick={onNext}
         disabled={isSubmitting}
-        className={`py-3 px-6 rounded text-sm sm:text-base font-semibold text-white transition-colors shadow-md disabled:opacity-60 disabled:cursor-not-allowed`}
+        className={`flex items-center justify-center gap-2 rounded px-6 py-3 text-sm font-semibold text-white shadow-md transition-colors disabled:cursor-not-allowed disabled:opacity-60 sm:text-base`}
         style={{ backgroundColor: '#2A205E' }}
         onMouseEnter={(e) => {
           if (isSubmitting) return;
@@ -44,7 +45,14 @@ export function LeadFormFooter({ onNext, onPrevious, className = '', isSubmittin
         }}
         type="button"
       >
-        {t(isLastStep ? 'buttons.submit' : 'buttons.next')}
+        {isSubmitting ? (
+          <>
+            <Image src="/images/anibot.gif" alt="Loading" width={28} height={28} className="h-7 w-7" priority />
+            <span>{t(isLastStep ? 'buttons.submit' : 'buttons.next')}</span>
+          </>
+        ) : (
+          t(isLastStep ? 'buttons.submit' : 'buttons.next')
+        )}
       </button>
     </footer>
   );

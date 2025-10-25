@@ -6,6 +6,32 @@
   animation: step-fade-in 0.35s ease-out;
 }
 
+.scroll-area {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s ease;
+}
+
+.scroll-area:hover {
+  scrollbar-color: #b5bbd3 transparent;
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.scroll-area:hover::-webkit-scrollbar-thumb {
+  background: rgba(42, 32, 94, 0.35);
+}
+
 @keyframes page-fade-in {
   0% {
     opacity: 0;

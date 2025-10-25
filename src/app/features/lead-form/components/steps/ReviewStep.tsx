@@ -30,7 +30,7 @@ export function ReviewStep() {
     <div className="space-y-8 text-grey">
       <section className="space-y-3">
         <header className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-grey">{t('summary.title')}</h2>
+          <h2 className="text-lg font-semibold text-denim">{t('summary.title')}</h2>
           <button
             type="button"
             onClick={() => goToStep('personal')}
@@ -57,7 +57,7 @@ export function ReviewStep() {
 
       <section className="space-y-3">
         <header className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-grey">{t('summary.contact')}</h2>
+          <h2 className="text-lg font-semibold text-denim">{t('summary.contact')}</h2>
           <button
             type="button"
             onClick={() => goToStep('contact')}
@@ -84,7 +84,7 @@ export function ReviewStep() {
 
       <section className="space-y-3">
         <header className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-grey">{t('summary.interests')}</h2>
+          <h2 className="text-lg font-semibold text-denim">{t('summary.interests')}</h2>
           <button
             type="button"
             onClick={() => goToStep('interests')}

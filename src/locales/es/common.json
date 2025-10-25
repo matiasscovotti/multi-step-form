@@ -27,11 +27,11 @@
   "fields": {
     "firstName": {
       "label": "Nombre",
-      "placeholder": "ej. Ana"
+      "placeholder": "Ana"
     },
     "lastName": {
       "label": "Apellido",
-      "placeholder": "ej. Pérez"
+      "placeholder": "Pérez"
     },
     "country": {
       "label": "País",
@@ -51,11 +51,11 @@
     },
     "role": {
       "label": "Cargo",
-      "placeholder": "ej. Directora de Innovación"
+      "placeholder": "Directora de Innovación"
     },
     "organization": {
       "label": "Organización",
-      "placeholder": "ej. Colegio Educabot"
+      "placeholder": "Colegio Educabot"
     },
     "interests": {
       "label": "Áreas de interés",
@@ -99,7 +99,7 @@
     "level": "Seleccioná un nivel"
   },
   "summary": {
-    "title": "Revisá tu información",
+    "title": "Información personal",
     "description": "Verificá que los datos sean correctos.",
     "language": "Idioma",
     "contact": "Datos de contacto",

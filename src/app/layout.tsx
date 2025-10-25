@@ -10,8 +10,8 @@ const ubuntu = Ubuntu({
 })
 
 export const metadata: Metadata = {
-  title: 'Multi Step Form',
-  description: 'Multi Step Form',
+  title: 'Educabot - FGC',
+  description: 'Formulario de Lead FGC',
   icons: {
     icon: {
       url: '/images/favicon.jpg',

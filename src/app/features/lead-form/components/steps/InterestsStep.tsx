@@ -83,7 +83,7 @@ export function InterestsStep() {
         label={t('fields.interests.label')}
         error={interestsErrors.areas?.message ? t(interestsErrors.areas.message) : undefined}
       >
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-3">
           {interestTranslations.map((option) => {
             const isSelected = Array.isArray(selectedInterests) && selectedInterests.includes(option.value);
             return (
@@ -91,7 +91,7 @@ export function InterestsStep() {
                 key={option.value}
                 type="button"
                 onClick={() => toggleInterest(option.value)}
-                className={`flex items-center gap-4 rounded-lg border px-4 py-4 text-left text-sm sm:text-base font-medium transition-colors ${
+                className={`flex min-h-[56px] min-w-0 items-center gap-4 rounded-lg border px-4 py-4 text-left text-sm sm:text-base font-medium transition-colors ${
                   isSelected
                     ? 'border-white bg-primary/10 text-denim shadow-sm'
                     : 'border-border-grey bg-white text-denim hover:border-primary/40'
@@ -106,7 +106,7 @@ export function InterestsStep() {
                 >
                   {isSelected ? <CheckIcon className="h-3 w-3" /> : null}
                 </span>
-                <span className="flex-1">{option.label}</span>
+                <span className="flex-1 whitespace-normal leading-snug">{option.label}</span>
               </button>
             );
           })}
