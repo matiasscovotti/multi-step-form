@@ -135,7 +135,7 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     if (addOnsFromLocalStorage) {
       setAddOns(addOnsFromLocalStorage)
     }
-  }, [])
+  }, [getValueFromLocalStorage])
 
   const value = {
     nameField,

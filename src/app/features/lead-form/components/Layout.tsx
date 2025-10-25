@@ -53,17 +53,11 @@ export function LeadFormLayout() {
     const payload = getValues();
     console.log('[LeadForm] Submitting payload', payload);
 
-    const webhookUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEET_WEBHOOK;
-
     try {
       setSubmissionStatus('submitting');
       setSubmissionError(null);
 
-      if (!webhookUrl) {
-        throw new Error('Google Sheet webhook URL is not configured.');
-      }
-
-      const response = await fetch(webhookUrl, {
+      const response = await fetch('/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -78,7 +72,7 @@ export function LeadFormLayout() {
         console.warn('[LeadForm] Could not parse webhook response JSON', parseError);
       }
 
-      console.log('[LeadForm] Webhook response', response.status, responseBody);
+      console.log('[LeadForm] Submission response', response.status, responseBody);
 
       if (!response.ok || responseBody?.success === false) {
         throw new Error(responseBody?.error || `Request failed with status ${response.status}`);

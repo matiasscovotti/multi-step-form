@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { forwardRef, useState, useRef, useEffect } from 'react';
 import PhoneInputWithCountry, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
 import type { E164Number } from 'libphonenumber-js/core';
@@ -108,9 +109,11 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
               aria-expanded={isOpen}
             >
               {getFlagSrc(value) ? (
-                <img
+                <Image
                   src={getFlagSrc(value) as string}
                   alt={value ? `${en[value as keyof typeof en] ?? value} flag` : 'Globe icon'}
+                  width={24}
+                  height={18}
                   className="h-4 w-6 rounded object-cover"
                 />
               ) : (
@@ -158,9 +161,11 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function
                           }`}
                         >
                           {flagSrc ? (
-                            <img
+                            <Image
                               src={flagSrc}
                               alt={`${countryName} flag`}
+                              width={24}
+                              height={18}
                               className="h-4 w-6 rounded object-cover"
                             />
                           ) : (
