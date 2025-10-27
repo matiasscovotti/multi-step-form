@@ -21,7 +21,8 @@ export function LeadFormFooter({ onNext, onPrevious, className = '', isSubmittin
 
   return (
     <footer
-      className={`sticky bottom-0 flex w-full items-center justify-between gap-4 border-t border-border-grey/60 bg-white/90 p-4 backdrop-blur-sm sm:px-6 sm:py-6 ${className}`}
+      className={`fixed inset-x-0 bottom-0 z-40 flex w-full items-center justify-between gap-4 border-t border-border-grey/60 bg-white/95 p-4 backdrop-blur-sm sm:sticky sm:inset-auto sm:bottom-0 sm:px-6 sm:py-6 ${className}`}
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)' }}
     >
       <button
         onClick={onPrevious}

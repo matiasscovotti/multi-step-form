@@ -193,7 +193,7 @@ export function LeadFormLayout() {
       </aside>
       <div className="flex flex-1 overflow-hidden sm:mx-auto sm:max-w-[760px]">
         <div className="flex h-full w-full min-h-0 flex-col gap-4 pt-4 sm:gap-3 sm:pt-0">
-          <div className="scroll-area flex-1 overflow-y-auto pb-28 sm:pb-0">
+          <div className="scroll-area flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom,0px)+104px)] sm:pb-0">
             <Form.Card>
               {isSuccess ? (
                 <div key="success" className="step-transition flex flex-col items-center gap-4 py-12 text-center">
