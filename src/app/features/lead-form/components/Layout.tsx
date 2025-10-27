@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import en from 'react-phone-number-input/locale/en';
 
 import Form from '@/app/components/Form';
 
@@ -123,9 +124,11 @@ export function LeadFormLayout() {
     }
 
     const payload = getValues();
+    const countryCode = payload.contact?.country as keyof typeof en | undefined;
+    const contactCountryName = countryCode ? en[countryCode] ?? payload.contact?.country : payload.contact?.country;
     const submissionPayload = {
       ...payload,
-      contact_country: payload.contact?.country
+      contact_country: contactCountryName
     };
     console.log('[LeadForm] Submitting payload', submissionPayload);
 
